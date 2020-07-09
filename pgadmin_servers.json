@@ -1,0 +1,13 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "PG SQL Workshop",
+            "Group": "Servers",
+            "Port": 5432,
+            "Username": "postgres",
+            "Host": "ws-db",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "postgres"
+        }
+    }
+}

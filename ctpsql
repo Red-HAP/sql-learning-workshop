@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+docker exec -it ws_db psql -d postgres -U postgres
+exit $?
+
