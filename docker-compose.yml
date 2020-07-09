@@ -12,6 +12,7 @@ services:
       - "15444:5432"
     volumes:
       - ./init:/docker-entrypoint-initdb.d
+      - ./workshop:/opt/workshop:rw
     command:
       # This command give more precise control over the parameter settings
       # Included are loading the pg_stat_statements lib
