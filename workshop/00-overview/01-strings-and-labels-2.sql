@@ -7,3 +7,6 @@
 select * 
   from "user"
  where surname = 'Williams';
+
+-- So labels are used to identify objects. They are only required with 
+-- double-quotes when ambiguity arises as a bareword.
