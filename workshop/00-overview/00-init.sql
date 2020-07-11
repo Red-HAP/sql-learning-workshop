@@ -23,7 +23,7 @@ create table overview.user (
     surname text not null,
     forename text not null,
     email_address text not null,
-    constraint user_unique_email unique (email_address),
+    constraint user_unique_email unique (email_address)
 );
 
 -- DDL: Let's document!

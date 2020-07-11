@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 psycopg2-binary = ">=2.8"
+faker = "*"
 
 [requires]
 python_version = "3.7"
