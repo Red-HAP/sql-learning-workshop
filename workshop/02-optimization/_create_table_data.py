@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import datetime
 import faker
 import json
 import sys
@@ -22,16 +23,8 @@ label_keys = [FAKER.word() for _ in range(5)]
 label_values = [FAKER.word() for _ in range(5)]
 pod_types = ['POD', 'STORAGE']
 
-record_tmpl = {
-    'cluster_id': None,
-    'resource_id': None,
-    'namespace': None,
-    'node': None,
-    'pod': None,
-    'pod_type': None,
-    'stats': None,
-    'pod_labels': None
-}
+start_date = datetime.date(2020, 5, 1)
+end_date = datetime.date(2020, 5, 31)
 
 
 def db_json_dumps(d):
@@ -58,13 +51,15 @@ def json_adapter(d):
 
 def make_record():
     ix = FAKER.random_int(0, len(cluster_ids) - 1)
-    rec = record_tmpl.copy()
-    rec['cluster_id'] = cluster_ids[ix]
-    rec['resource_id'] = resource_ids[ix]
-    rec['namespace'] = namespaces[FAKER.random_int(0, len(namespaces) - 1)]
-    rec['node'] = nodes[FAKER.random_int(0, len(nodes) - 1)]
-    rec['pod'] = pods[FAKER.random_int(0, len(pods) - 1)]
-    rec['pod_type'] = pod_types[FAKER.random_int(0, len(pod_types) - 1)]
+    rec = {
+        'cluster_id': cluster_ids[ix],
+        'resource_id': resource_ids[ix],
+        'namespace': namespaces[FAKER.random_int(0, len(namespaces) - 1)],
+        'node': nodes[FAKER.random_int(0, len(nodes) - 1)],
+        'pod': pods[FAKER.random_int(0, len(pods) - 1)],
+        'pod_type': pod_types[FAKER.random_int(0, len(pod_types) - 1)],
+        'usage_start': FAKER.date_between(start_date, end_date),
+    }
 
     if rec['pod_type'] == 'POD':
         stats_keys = pod_stats_keys
@@ -121,6 +116,7 @@ insert
       node,
       pod,
       pod_type,
+      usage_start,
       stats,
       labels
   )
@@ -131,6 +127,7 @@ values (
     %(node)s,
     %(pod)s,
     %(pod_type)s,
+    %(usage_start)s,
     %(stats)s,
     %(labels)s
 );
