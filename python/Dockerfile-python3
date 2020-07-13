@@ -1,5 +1,6 @@
 FROM python:3.7
 RUN pip install pipenv
 RUN mkdir -p /opt/sql-learning-workshop
+RUN echo 'export PS1="[\u@ctbash \W]# "' >>/root/.bashrc
 WORKDIR /opt/sql-learning-workshop
 CMD ['/bin/bash']
