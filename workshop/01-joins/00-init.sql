@@ -1,11 +1,20 @@
 -- create joins schema
+\echo 
+\echo -------------------------------------------- 
+\echo -------------------------------------------- 
+\echo -- Creating schema "joins"
 create schema joins;
 
 -- set search path
+\echo 
+\echo -------------------------------------------- 
+\echo -- Setting search path.
 set search_path = joins, public;
 
 -- create a suite of tables for a user and the user's information
-\echo Creating a user table
+\echo 
+\echo -------------------------------------------- 
+\echo -- Creating an app_user table
 create table if not exists "app_user" (
     username text primary key,
     password text not null check (password != ''),
@@ -15,8 +24,11 @@ create table if not exists "app_user" (
 );
 comment on table app_user is 'Credentials for a user';
 
+select pg_sleep(2);
 -- create a customer table. Primary keys can also be foreign keys
-\echo Creating a customer table that will 1:1 link to the user table.
+\echo 
+\echo -------------------------------------------- 
+\echo -- Creating a customer table that will 1:1 link to the user table.
 create table if not exists customer (
     username text primary key references app_user (username) on delete cascade on update cascade,
     surname text not null,
@@ -28,10 +40,13 @@ create table if not exists customer (
 comment on table customer is 'Customer name information';
 comment on column customer.username is 'Link to app_user.username';
 
+select pg_sleep(2);
 -- create a mapping table for contact information
-\echo create a mapping table that will map to the customer table directly 
-\echo via a foreign key and will have weak references to contact type tables
-\echo using a (thing_type, thing_id) link
+\echo 
+\echo -------------------------------------------- 
+\echo -- Create a mapping table that will map to the customer table directly 
+\echo -- via a foreign key and will have weak references to contact type tables
+\echo -- using a (thing_type, thing_id) link
 create table if not exists contact_info (
     id serial primary key,
     username text references customer (username) on delete cascade,
@@ -45,8 +60,10 @@ comment on column contact_info.contact_type is 'Identify the table to which cont
 comment on column contact_info.contact_id is 'Primary key of linked table from type';
 comment on column contact_info.username is 'Link to customer table';
 
-
-\echo Create a table of unique email addresses
+select pg_sleep(2);
+\echo 
+\echo -------------------------------------------- 
+\echo -- Create a table of unique email addresses
 create table if not exists email_address (
     id serial primary key,
     type text generated always as ('EMAIL') stored,
@@ -58,8 +75,10 @@ create table if not exists email_address (
 );
 comment on table email_address is 'Store unique email addresses';
 
-
-\echo Create a table of unique telephone numbers
+select pg_sleep(2);
+\echo 
+\echo -------------------------------------------- 
+\echo -- Create a table of unique telephone numbers
 create table if not exists telno (
     id serial primary key,
     type text generated always as ('TELNO') stored,
@@ -72,8 +91,10 @@ create table if not exists telno (
 );
 comment on table telno is 'Store unique telephone numbers';
 
-
-\echo Create a table of unique addresses
+select pg_sleep(2);
+\echo 
+\echo -------------------------------------------- 
+\echo -- Create a table of unique addresses
 create table if not exists address (
     id serial primary key,
     type text generated always as ('ADDRESS') stored,
@@ -93,19 +114,23 @@ create table if not exists address (
 );
 comment on table address is 'Store unique addresses';
 
--- Whew! Insert our data
--- WITH CTE MAGIC!!
-\echo Creating users...
+select pg_sleep(2);
+\echo 
+\echo -------------------------------------------- 
+\echo -- Creating user records
 insert 
   into app_user (username, password) 
 values 
 ('eek', md5('eek')),
 ('ook' ,md5('ook'));
 
+select pg_sleep(2);
 -- This may be frowned upon as a slight abuse...
 -- But it shows what you can do with CTEs
-\echo Now creating all other information within the same transaction
-\echo utilizing CTEs
+\echo 
+\echo -------------------------------------------- 
+\echo -- Now creating all other information within the same transaction
+\echo -- utilizing CTEs
 with new_customer as (
 insert into customer (surname, forename, username)
 values
@@ -180,19 +205,21 @@ select c.username,
    and c.surname = 'Pickbooger';
 
 
+select pg_sleep(5);
 -- Find only the information for a primary phone number
 -- This will use an inner join
-\echo
-\echo This is an example of an inner join.
-\echo The output will be a linking of the customer to matching telno data only.
-\echo This will work like set intersection.
-\echo "   _     _    "
-\echo "  /  \  /  \  "
-\echo " /     X    \ "
-\echo "|     |*|    |"
-\echo " \     X    / "
-\echo "  \  /  \  /  "
-\echo "    -     -   "
+\echo 
+\echo -------------------------------------------- 
+\echo -- This is an example of an inner join.
+\echo -- The output will be a linking of the customer to matching telno data only.
+\echo -- This will work like set intersection.
+\echo -- "   _     _    "
+\echo -- "  /  \  /  \  "
+\echo -- " /     X    \ "
+\echo -- "|     |*|    |"
+\echo -- " \     X    / "
+\echo -- "  \  /  \  /  "
+\echo -- "    -     -   "
 select c.username,
        c.surname,
        c.forename,
@@ -208,16 +235,18 @@ select c.username,
 
 -- Find all addresses and all customers attached to them
 -- This will use a right join
-\echo
-\echo This query will return all addresses and any associated customer.
-\echo This is an example of a right join.
-\echo "   _     _    "
-\echo "  /  \  /**\  "
-\echo " /     X****\ "
-\echo "|     |*|****|"
-\echo " \     X****/ "
-\echo "  \  /  \**/  "
-\echo "    -     -   "
+select pg_sleep(5);
+\echo 
+\echo -------------------------------------------- 
+\echo -- This query will return all addresses and any associated customer.
+\echo -- This is an example of a right join.
+\echo -- "   _     _    "
+\echo -- "  /  \  /**\  "
+\echo -- " /     X****\ "
+\echo -- "|     |*|****|"
+\echo -- " \     X****/ "
+\echo -- "  \  /  \**/  "
+\echo -- "    -     -   "
 select c.username,
        c.surname,
        c.forename,
@@ -240,22 +269,26 @@ select c.username,
    and a.id = ci.id;
 
 -- verify the address table data
+\echo 
+\echo -- Verify the address table data.
 select * 
   from address;
 -- note that there are 2 rows in the address table
 
+select pg_sleep(5);
 -- Find any customers and any telnos associated with them
 -- This will use a left join
-\echo
-\echo This query will return all customers and any associated telno data.
-\echo This is an example of a left join.
-\echo "   _     _    "
-\echo "  /**\  /  \  "
-\echo " /*****X    \ "
-\echo "|*****|*|    |"
-\echo " \*****X    / "
-\echo "  \**/  \  /  "
-\echo "    -     -   "
+\echo 
+\echo -------------------------------------------- 
+\echo -- This query will return all customers and any associated telno data.
+\echo -- This is an example of a left join.
+\echo -- "   _     _    "
+\echo -- "  /**\  /  \  "
+\echo -- " /*****X    \ "
+\echo -- "|*****|*|    |"
+\echo -- " \*****X    / "
+\echo -- "  \**/  \  /  "
+\echo -- "    -     -   "
 select c.surname,
        c.forename,
        t.telno_type,
@@ -276,14 +309,16 @@ select c.surname,
 -- but the result set will be different from moving the condidion 
 -- from the join step to the where step
 -- This will use a left join
-\echo
-\echo This query is mostly the same as the last left join
-\echo query. But one of the conditions was moved from 
-\echo the join clause to the where clause. Note the difference
-\echo in the output. 
-\echo You must take care where you put conditions as they will 
-\echo affect output based on when they are evaluated.
-\echo (Join time vs filter time)
+select pg_sleep(5);
+\echo 
+\echo -------------------------------------------- 
+\echo -- This query is mostly the same as the last left join
+\echo -- query. But one of the conditions was moved from 
+\echo -- the join clause to the where clause. Note the difference
+\echo -- in the output. 
+\echo -- You must take care where you put conditions as they will 
+\echo -- affect output based on when they are evaluated.
+\echo -- (Join time vs filter time)
 select c.surname,
        c.forename,
        t.telno_type,
@@ -298,23 +333,25 @@ select c.surname,
     on t.type = ci.contact_type
    and t.id = ci.contact_id
  where ci.contact_type = 'TELNO';
-\echo Note that the "Jack Human" record is missing.
+\echo -- Note that the "Jack Human" record is missing.
 -- note that the record for Jack Human is now missing. 
 -- care must be taken as to where conditions are placed
 -- in order to get the correct intended result
 
 -- Finally, let's get a full permutation of customers and telnos
 -- This will use a cross join (sometimes known as a full join)
-\echo
-\echo This query will output all permutations of customer and telno.
-\echo This is an example of a cross join.
-\echo "   _     _    "
-\echo "  /**\  /**\  "
-\echo " /*****X****\ "
-\echo "|*****|*|****|"
-\echo " \*****X****/ "
-\echo "  \**/  \**/  "
-\echo "    -     -   "
+select pg_sleep(5);
+\echo 
+\echo -------------------------------------------- 
+\echo -- This query will output all permutations of customer and telno.
+\echo -- This is an example of a cross join.
+\echo -- "   _     _    "
+\echo -- "  /**\  /**\  "
+\echo -- " /*****X****\ "
+\echo -- "|*****|*|****|"
+\echo -- " \*****X****/ "
+\echo -- "  \**/  \**/  "
+\echo -- "    -     -   "
 select c.username,
        c.surname,
        t.id as telno_id,
@@ -324,9 +361,10 @@ select c.username,
   join telno t;
 
 
-\echo
-\echo To see the tables, use '\dt+'
-\echo To describe the table structure, use '\d+ <table_name>'
-\echo Explore the data in the tables using select statements.
-\echo Try adding or deleting data to see changes in the sql statements
+\echo 
+\echo -------------------------------------------- 
+\echo -- To see the tables, use "\dt+"
+\echo -- To describe the table structure, use "\d+ <table_name>"
+\echo -- Explore the data in the tables using select statements.
+\echo -- Try adding or deleting data to see changes in the sql statements
 
