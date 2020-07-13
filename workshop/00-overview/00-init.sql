@@ -12,6 +12,12 @@ create database sql_workshop;
 \echo -- Now connecting to the "sql_workshop" database. This is a special psql command.
 \c sql_workshop
 
+\echo
+\echo -------------------------------------------- 
+\echo Make sure monitoring extension is enabled.
+create extension if not exists pg_stat_statements;
+
+
 -- DDL: Create a table
 \echo 
 \echo -------------------------------------------- 
