@@ -205,7 +205,7 @@ select c.username,
    and c.surname = 'Pickbooger';
 
 
-select pg_sleep(5);
+select pg_sleep(10);
 -- Find only the information for a primary phone number
 -- This will use an inner join
 \echo 
@@ -235,7 +235,7 @@ select c.username,
 
 -- Find all addresses and all customers attached to them
 -- This will use a right join
-select pg_sleep(5);
+select pg_sleep(10);
 \echo 
 \echo -------------------------------------------- 
 \echo -- This query will return all addresses and any associated customer.
@@ -275,7 +275,7 @@ select *
   from address;
 -- note that there are 2 rows in the address table
 
-select pg_sleep(5);
+select pg_sleep(10);
 -- Find any customers and any telnos associated with them
 -- This will use a left join
 \echo 
@@ -309,7 +309,7 @@ select c.surname,
 -- but the result set will be different from moving the condidion 
 -- from the join step to the where step
 -- This will use a left join
-select pg_sleep(5);
+select pg_sleep(10);
 \echo 
 \echo -------------------------------------------- 
 \echo -- This query is mostly the same as the last left join
@@ -340,7 +340,7 @@ select c.surname,
 
 -- Finally, let's get a full permutation of customers and telnos
 -- This will use a cross join (sometimes known as a full join)
-select pg_sleep(5);
+select pg_sleep(10);
 \echo 
 \echo -------------------------------------------- 
 \echo -- This query will output all permutations of customer and telno.

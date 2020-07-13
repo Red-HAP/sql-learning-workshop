@@ -15,7 +15,7 @@ select *
 -- Let's set the path that the engine will use to resolve an object
 -- This path will be evaluated in order much like the PATH environment
 -- variable in Linux/Unix
-select pg_sleep(2);
+select pg_sleep(5);
 \echo
 \echo -------------------------------------------- 
 \echo -- Set the schema search path so we do not 
@@ -30,7 +30,7 @@ set search_path = overview, public;
 
 -- Note that user is now visible as is items from the public schema.
 -- Select Ash again.
-select pg_sleep(2);
+select pg_sleep(5);
 \echo
 \echo -------------------------------------------- 
 \echo -- Now select the Ash record again from the user table. 

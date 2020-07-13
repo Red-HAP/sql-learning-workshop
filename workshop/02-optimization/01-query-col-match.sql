@@ -20,7 +20,7 @@ select count(*)
   from pod_info
  where namespace = 'enjoy';
 
-select pg_sleep(5);
+select pg_sleep(10);
 -- let's observe what happens when we add the text pattern ops
 \echo 
 \echo -------------------------------------------- 
@@ -37,7 +37,7 @@ select count(*)
  where namespace like 'enjoy%';
 -- note which index was used
 
-select pg_sleep(5);
+select pg_sleep(10);
 -- Let's try a like operation matching all 'county' namespaces
 \echo 
 \echo -------------------------------------------- 
@@ -48,7 +48,7 @@ select count(*)
  where namespace like '%enjoy%';
 -- note that a parallel seq scan was used.
 
-select pg_sleep(5);
+select pg_sleep(10);
 -- let's try a gin index with trigram ops
 \echo 
 \echo -------------------------------------------- 
