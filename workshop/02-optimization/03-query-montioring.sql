@@ -16,6 +16,8 @@ select pg_sleep(10);
 \echo -------------------------------------------- 
 \echo Running some queries...
 
+\echo
+\echo Simple select count of pods by type and namespace
 select namespace, 
        pod_type, 
        count(*) as "count"
@@ -27,6 +29,8 @@ select namespace,
     by 3 desc
 \g /dev/null
 
+\echo
+\echo Select with joins.
 select c.username,
        c.surname,
        c.forename,
@@ -41,7 +45,8 @@ select c.username,
  where ci.is_primary
 \g /dev/null
 
-       
+\echo
+\echo Multiple runs of the same query
 select cluster_id, 
        namespace,
        node,
@@ -157,6 +162,8 @@ select cluster_id,
        pod
 \g /dev/null
 
+\echo
+\echo Big query 1
 select cluster_id, 
        namespace,
        node,
@@ -176,6 +183,8 @@ select cluster_id,
        pod
 \g /dev/null
 
+\echo
+\echo Big query 2
 select cluster_id, 
        namespace,
        node,
@@ -199,16 +208,22 @@ select cluster_id,
        )
 \g /dev/null
 
+\echo
+\echo Update statement
 update pod_info
    set stats = jsonb_set(stats, '{eek}', '500')
  where labels->>'well' = 'oil'
    and usage_start >= '2020-05-03'::date
    and usage_start < '2020-05-11'::date;
 
+\echo
+\echo Delete statement
 delete
   from pod_info
  where cluster_id = '9234875050353';
 
+\echo
+\echo Insert statement
 insert 
   into joins.app_user (username, password)
 select 'aretha' || extract(epoch from current_timestamp)::int::text, md5('i-am-diva');

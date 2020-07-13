@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+docker exec -it ws_db /bin/bash
+exit $?
+

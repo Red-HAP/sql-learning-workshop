@@ -59,6 +59,8 @@ services:
       - ./pgadmin_servers.json:/pgadmin4/servers.json
     links:
       - ws-db
+    depends_on:
+      - ws-db
 
   ws-grafana:
     container_name: ws_grafana
@@ -67,6 +69,16 @@ services:
         dockerfile: Dockerfile-grafana
     ports:
         - 3002:3000
+    links:
+        - ws-db
+    depends_on:
+        - ws-db
+
+  ws-python:
+    container_name: ws_python
+    build:
+        context: python
+        dockerfile: Dockerfile-python3
     links:
         - ws-db
     depends_on:

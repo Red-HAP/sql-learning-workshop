@@ -1,0 +1,5 @@
+FROM python:3.7
+RUN pip install pipenv
+RUN mkdir -p /opt/sql-learning-workshop
+WORKDIR /opt/sql-learning-workshop
+CMD ['/bin/bash']
