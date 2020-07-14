@@ -153,7 +153,12 @@ select c.username,
        t.telno
   from customer c
  cross
-  join telno t;
+  join telno t
+ where t.id in (
+         select contact_id
+           from contact_info
+          where contact_type = 'TELNO'
+       );
 
 
 \echo 

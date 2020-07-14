@@ -174,8 +174,14 @@ returning *
 ),
 new_telno as (
 insert into telno (telno) 
-values ('9195550001'), ('9195550002'), ('9195550003')
+select '00055'::text || lpad(x::text, 5, '0')
+  from generate_series(1, 99999, 5) as x
 returning *
+),
+limit_new_telno as (
+select *
+  from new_telno
+  limit 3
 )
 insert 
   into contact_info (
@@ -198,7 +204,7 @@ select c.username,
        x.type,
        x.id,
        (x.id = 1)::boolean
-  from new_telno x
+  from limit_new_telno x
  cross
   join new_customer c
  where x.telno_type = 'mobile'

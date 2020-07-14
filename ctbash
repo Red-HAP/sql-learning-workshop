@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-docker run --rm -it -v $(pwd)/:/opt/sql-learning-workshop:rw sql-learning-workshop_ws-python /bin/bash
+docker run --rm -it --network sql-learning-workshop_default -v $(pwd)/:/opt/sql-learning-workshop:rw sql-learning-workshop_ws-python /bin/bash
