@@ -4,17 +4,14 @@ import datetime
 import psycopg2
 from psycopg2.extras import NamedTupleCursor
 
-CACHE_EXISTS = set()
-CACHE_NOT_EXISTS = set()
+CACHE = {}
 
 def connect(db_url):
     return psycopg2.connect(db_url, cursor_factory=NamedTupleCursor)
 
 def lookup_telno(conn, telno):
-    if telno in CACHE_EXISTS:
-        return 1, 1
-    elif telno in CACHE_NOT_EXISTS:
-        return 0, 1
+    if telno in CACHE:
+        return CACHE[telno], 1
     else:
         sql = """
 select exists 
@@ -28,13 +25,9 @@ select exists
         with conn.cursor() as cur:
             cur.execute(sql, [telno])
             res = cur.fetchone()
-        
-        if res and res.telno_exists:
-            CACHE_EXISTS.add(telno)
-            return 1, 0
-        else:
-            CACHE_NOT_EXISTS.add(telno)
-            return 0, 0
+
+        CACHE[telno] = (res and res.telno_exists)
+        return CACHE[telno], 0
 
 def validate_telnos(conn):
     cache_hits = 0
