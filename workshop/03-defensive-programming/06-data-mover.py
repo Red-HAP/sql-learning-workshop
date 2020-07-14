@@ -73,6 +73,7 @@ select id, cluster_id, resource_id, namespace, node, pod, pod_type, usage_start,
     start = datetime.datetime.now()
     with conn.cursor() as cur:
         while True:
+            iteration += 1
             cur.execute(sql, values)
             rows = cur.rowcount
             if rows == 0:
