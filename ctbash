@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
-docker run --rm -it --network sql-learning-workshop_default -v $(pwd)/:/opt/sql-learning-workshop:rw sql-learning-workshop_ws-python /bin/bash
+WS_IMAGE=$(docker image ls | awk '{ print $1; }' | grep -E 'sql.*learning.*workshop.*ws.*python')
+WS_NETWORK="${WS_IMAGE%_*}_default"
+docker run --rm -it --network ${WS_NETWORK} -v $(pwd)/:/opt/sql-learning-workshop:rw ${WS_IMAGE} /bin/bash
