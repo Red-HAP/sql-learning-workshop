@@ -54,7 +54,7 @@ services:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL-postgres}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD-postgres}
     ports:
-      - "${PGADMIN_PORT-8432}:80"
+      - "${PGADMIN_PORT-8433}:80"
     volumes:
       - ./pgadmin_servers.json:/pgadmin4/servers.json
     links:
